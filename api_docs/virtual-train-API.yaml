@@ -1,0 +1,3184 @@
+openapi: 3.0.1
+info:
+  title: Virtual Train API
+  description: Virtual Train API
+  version: '1.0'
+servers:
+  - url: https://gateway.apiportal.ns.nl/virtual-train-api
+paths:
+  '/v1/images/{image}':
+    get:
+      tags:
+        - Image
+      summary: getImage
+      description: Train image
+      operationId: getImage
+      parameters:
+        - name: image
+          in: path
+          description: 'Name of the image including extension, usually .png.'
+          required: true
+          schema:
+            type: string
+          example: nsr_flirt_3.png
+      responses:
+        '200':
+          description: OK
+          content:
+            image/png:
+              schema:
+                type: string
+                format: byte
+              example: ''
+  '/v1/images/{materieel}/{image}':
+    get:
+      tags:
+        - Image
+      summary: getImageFromSubdirectory
+      description: RollingStock image
+      operationId: getImageFromSubdirectory
+      parameters:
+        - name: materieel
+          in: path
+          description: Name of the subdirectory
+          required: true
+          schema:
+            type: string
+          example: nsr_flirt_3
+        - name: image
+          in: path
+          description: 'Name of the image including extension, usually .png.'
+          required: true
+          schema:
+            type: string
+          example: nsr_flirt_3_1.png
+      responses:
+        '200':
+          description: OK
+          content:
+            image/png:
+              schema:
+                type: string
+                format: byte
+              example: ''
+  /vehicle:
+    get:
+      tags:
+        - Vehicle
+      summary: getVehicles
+      description: Information about all vehicles
+      operationId: getVehicles
+      parameters:
+        - name: lat
+          in: query
+          description: Format - float. Latitude coordinate
+          schema:
+            type: number
+            format: float
+            default: 0
+        - name: lng
+          in: query
+          description: Format - float. Longitude coordinate
+          schema:
+            type: number
+            format: float
+            default: 0
+        - name: radius
+          in: query
+          description: Format - int32. Radius around the given coordinates in meters.
+          schema:
+            type: integer
+            format: int32
+        - name: limit
+          in: query
+          description: Format - int32. Maximum number of vehicles to return.
+          schema:
+            type: integer
+            format: int32
+        - name: route
+          in: query
+          description: Format - int32. Route to filter.
+          schema:
+            type: integer
+            format: int32
+        - name: features
+          in: query
+          description: Type of material to return. If the materieel value is used the material number of the train will be returned.
+          schema:
+            enum:
+              - bus
+              - materieel
+              - trein
+            type: string
+      responses:
+        '200':
+          description: List of vehicles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Treinen'
+        '400':
+          description: List of vehicles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Treinen'
+        '500':
+          description: List of vehicles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Treinen'
+  '/v1/platform/{station}/{platform}':
+    get:
+      tags:
+        - Platform
+      summary: getPlatformInfo
+      description: 'Contains platform information for 5 stations: Ehv, Ht, Ut, Asa, Shl'
+      operationId: getPlatformInfo
+      parameters:
+        - name: station
+          in: path
+          description: The station code.
+          required: true
+          schema:
+            type: string
+        - name: platform
+          in: path
+          description: The platform number.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Information about platforms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformGroup'
+              example:
+                station: string
+                platform: string
+                directionFromLeftToRight: string
+                platformItems:
+                  - position: 0
+                    type: BAKBORD
+                    platformLetter: string
+                    bakBord: 0
+                    bakBordKrom: 0
+                    fase: string
+                    description: string
+                    bakBordKromOrElseBakBord: 0
+                platformDirections: { }
+                perronEinde:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+                perronBegin:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+        '400':
+          description: Information about platforms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformGroup'
+              example:
+                station: string
+                platform: string
+                directionFromLeftToRight: string
+                platformItems:
+                  - position: 0
+                    type: BAKBORD
+                    platformLetter: string
+                    bakBord: 0
+                    bakBordKrom: 0
+                    fase: string
+                    description: string
+                    bakBordKromOrElseBakBord: 0
+                platformDirections: { }
+                perronEinde:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+                perronBegin:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+        '500':
+          description: Information about platforms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformGroup'
+              example:
+                station: string
+                platform: string
+                directionFromLeftToRight: string
+                platformItems:
+                  - position: 0
+                    type: BAKBORD
+                    platformLetter: string
+                    bakBord: 0
+                    bakBordKrom: 0
+                    fase: string
+                    description: string
+                    bakBordKromOrElseBakBord: 0
+                platformDirections: { }
+                perronEinde:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+                perronBegin:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+  '/v1/prognose/{ritnummer}':
+    get:
+      tags:
+        - Crowd forecast
+      summary: getPrognose
+      description: Information about the crowd forecast of a train
+      operationId: getPrognose
+      parameters:
+        - name: ritnummer
+          in: path
+          description: Format - int32. Ritnummer of the train
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Shows the crowd forecast of a certain train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Crowdforecast'
+              example:
+                trainNumber: 0
+                stationUic: string
+                date: string
+                classification: Crowdforecast.Classification.UNKNOWN
+        '400':
+          description: Shows the crowd forecast of a certain train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Crowdforecast'
+              example:
+                trainNumber: 0
+                stationUic: string
+                date: string
+                classification: Crowdforecast.Classification.UNKNOWN
+        '500':
+          description: Shows the crowd forecast of a certain train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Crowdforecast'
+              example:
+                trainNumber: 0
+                stationUic: string
+                date: string
+                classification: Crowdforecast.Classification.UNKNOWN
+  '/v1/ritnummer/{materieelnummer}':
+    get:
+      tags:
+        - Materieel
+      summary: getRitnummer
+      description: Converts a materieelnummer to a ritnummer
+      operationId: getRitnummer
+      parameters:
+        - name: materieelnummer
+          in: path
+          description: Format - int32. Materieelnummer of the train
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: A ritnummer.
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int32
+              example: ''
+        '400':
+          description: A ritnummer.
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int32
+              example: ''
+        '500':
+          description: A ritnummer.
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int32
+              example: ''
+  /v1/trein:
+    get:
+      tags:
+        - Trains
+      summary: getTrainInformation
+      description: Information about all trains
+      operationId: getTrainInformation
+      parameters:
+        - name: ids
+          in: query
+          description: Comma seperated list of id's. Note that all of the following parameters only work in conjuction with the id parameter.
+          schema:
+            type: string
+        - name: stations
+          in: query
+          description: Comma seperated list of Station codes
+          schema:
+            type: string
+          example: 'UT, AH'
+        - name: features
+          in: query
+          description: Comma seperated list of features.
+          schema:
+            enum:
+              - zitplaats
+              - platformitems
+              - cta
+              - drukte
+              - druktev2
+            type: string
+        - name: dateTime
+          in: query
+          description: Datetime to search in ISO8601
+          schema:
+            type: string
+        - name: all
+          in: query
+          description: Whether to get information about all the stations
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: List of information about all trains
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '400':
+          description: List of information about all trains
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '500':
+          description: List of information about all trains
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+  '/v1/trein/{ritnummer}':
+    get:
+      tags:
+        - Trains
+      summary: getTrainInformationForRitnummer
+      description: Information about a certain train
+      operationId: getTrainInformationForRitnummer
+      parameters:
+        - name: ritnummer
+          in: path
+          description: Format - int32. The 'ritnummer' (number) of the train.
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: features
+          in: query
+          description: Comma seperated list of features.
+          schema:
+            enum:
+              - zitplaats
+              - platformitems
+              - cta
+              - drukte
+            type: string
+        - name: dateTime
+          in: query
+          description: Datetime to search in ISO8601.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '400':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '500':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+  '/v1/trein/{ritnummer}/{stationscode}':
+    get:
+      tags:
+        - Trains
+      summary: getTrainInformationForRitnummerAndStationCode
+      description: Information about a specified train at a specified station
+      operationId: getTrainInformationForRitnummerAndStationCode
+      parameters:
+        - name: ritnummer
+          in: path
+          description: Format - int32. The 'ritnummer' (number) of the train.
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: stationscode
+          in: path
+          description: Code of the station
+          required: true
+          schema:
+            type: string
+          example: UT
+        - name: features
+          in: query
+          description: Comma seperated list of features
+          schema:
+            enum:
+              - zitplaats
+              - platformitems
+              - cta
+              - drukte
+            type: string
+        - name: dateTime
+          in: query
+          description: Datetime to search in ISO8601.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '400':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '500':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+  /v1/status:
+    get:
+      tags:
+        - Get Status
+      summary: getStatus
+      description: For monitoring purpose only
+      operationId: getStatus
+      responses:
+        '200':
+          description: Information about the status of the Virtual Train API
+          content:
+            application/json:
+              schema:
+                type: string
+              example: string
+  /api/vehicle:
+    get:
+      tags:
+        - Vehicle
+      summary: getVehicles_1
+      description: Information about all vehicles
+      operationId: getVehicles_1
+      parameters:
+        - name: lat
+          in: query
+          description: Format - float. Latitude coordinate
+          schema:
+            type: number
+            format: float
+            default: 0
+        - name: lng
+          in: query
+          description: Format - float. Longitude coordinate
+          schema:
+            type: number
+            format: float
+            default: 0
+        - name: radius
+          in: query
+          description: Format - int32. Radius around the given coordinates in meters.
+          schema:
+            type: integer
+            format: int32
+        - name: limit
+          in: query
+          description: Format - int32. Maximum number of vehicles to return.
+          schema:
+            type: integer
+            format: int32
+        - name: route
+          in: query
+          description: Format - int32. Route to filter.
+          schema:
+            type: integer
+            format: int32
+        - name: features
+          in: query
+          description: Type of material to return. If the materieel value is used the material number of the train will be returned.
+          schema:
+            enum:
+              - bus
+              - materieel
+              - trein
+            type: string
+      responses:
+        '200':
+          description: List of vehicles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Treinen'
+        '400':
+          description: List of vehicles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Treinen'
+        '500':
+          description: List of vehicles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Treinen'
+  '/api/v1/trein/{ritnummer}/{stationscode}':
+    get:
+      tags:
+        - Trains
+      summary: getTrainInformationForRitnummerAndStationCode_1
+      description: Information about a specified train at a specified station
+      operationId: getTrainInformationForRitnummerAndStationCode_1
+      parameters:
+        - name: ritnummer
+          in: path
+          description: Format - int32. The 'ritnummer' (number) of the train.
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: stationscode
+          in: path
+          description: Code of the station
+          required: true
+          schema:
+            type: string
+          example: UT
+        - name: features
+          in: query
+          description: Comma seperated list of features
+          schema:
+            enum:
+              - zitplaats
+              - platformitems
+              - cta
+              - drukte
+            type: string
+        - name: dateTime
+          in: query
+          description: Datetime to search in ISO8601.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '400':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '500':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+  '/api/v1/trein/{ritnummer}':
+    get:
+      tags:
+        - Trains
+      summary: getTrainInformationForRitnummer_1
+      description: Information about a certain train
+      operationId: getTrainInformationForRitnummer_1
+      parameters:
+        - name: ritnummer
+          in: path
+          description: Format - int32. The 'ritnummer' (number) of the train.
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: features
+          in: query
+          description: Comma seperated list of features.
+          schema:
+            enum:
+              - zitplaats
+              - platformitems
+              - cta
+              - drukte
+            type: string
+        - name: dateTime
+          in: query
+          description: Datetime to search in ISO8601.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '400':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '500':
+          description: Information about the requested train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+  /api/v1/trein:
+    get:
+      tags:
+        - Trains
+      summary: getTrainInformation_1
+      description: Information about all trains
+      operationId: getTrainInformation_1
+      parameters:
+        - name: ids
+          in: query
+          description: Comma seperated list of id's. Note that all of the following parameters only work in conjuction with the id parameter.
+          schema:
+            type: string
+        - name: stations
+          in: query
+          description: Comma seperated list of Station codes
+          schema:
+            type: string
+          example: 'UT, AH'
+        - name: features
+          in: query
+          description: Comma seperated list of features.
+          schema:
+            enum:
+              - zitplaats
+              - platformitems
+              - cta
+              - drukte
+              - druktev2
+            type: string
+        - name: dateTime
+          in: query
+          description: Datetime to search in ISO8601
+          schema:
+            type: string
+        - name: all
+          in: query
+          description: Whether to get information about all the stations
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: List of information about all trains
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '400':
+          description: List of information about all trains
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+        '500':
+          description: List of information about all trains
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreinInformatie'
+              example:
+                crowdInfoResponse: string
+                crowdInfoRequest: string
+                bron: DVS
+                ritnummer: 0
+                station: string
+                type: string
+                vervoerder: string
+                spoor: string
+                materieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                geplandeMaterieeldelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+                lengte: 0
+                lengteInMeters: 0
+                lengteInPixels: 0
+                geplandeLengte: 0
+                perronVoorzieningen:
+                  - paddingLeft: 0
+                    width: 0
+                    type: string
+                    description: string
+                bakbord: 0
+                rijrichting: LINKS
+                drukteVoorspelling: { }
+                treinDelen:
+                  - materieelType: DDZ_4
+                    drukteSVGPath: string
+                    materieelnummer: 0
+                    type: string
+                    faciliteiten:
+                      - TOILET
+                    afbeelding: string
+                    eindbestemming: string
+                    bakken:
+                      - afbeelding: { }
+                        drukte: Crowdforecast.Classification.UNKNOWN
+                    afbeeldingsSpecs:
+                      imageUrl: string
+                      width: 0
+                      height: 0
+                    zitplaatsInfo:
+                      staanplaatsEersteKlas: 0
+                      staanplaatsTweedeKlas: 0
+                      zitplaatsEersteKlas: 0
+                      zitplaatsTweedeKlas: 0
+                      klapstoelEersteKlas: 0
+                      klapstoelTweedeKlas: 0
+  '/api/v1/ritnummer/{materieelnummer}':
+    get:
+      tags:
+        - Materieel
+      summary: getRitnummer_1
+      description: Converts a materieelnummer to a ritnummer
+      operationId: getRitnummer_1
+      parameters:
+        - name: materieelnummer
+          in: path
+          description: Format - int32. Materieelnummer of the train
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: A ritnummer.
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int32
+              example: ''
+        '400':
+          description: A ritnummer.
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int32
+              example: ''
+        '500':
+          description: A ritnummer.
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int32
+              example: ''
+  '/api/v1/prognose/{ritnummer}':
+    get:
+      tags:
+        - Crowd forecast
+      summary: getPrognose_1
+      description: Information about the crowd forecast of a train
+      operationId: getPrognose_1
+      parameters:
+        - name: ritnummer
+          in: path
+          description: Format - int32. Ritnummer of the train
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Shows the crowd forecast of a certain train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Crowdforecast'
+              example:
+                trainNumber: 0
+                stationUic: string
+                date: string
+                classification: Crowdforecast.Classification.UNKNOWN
+        '400':
+          description: Shows the crowd forecast of a certain train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Crowdforecast'
+              example:
+                trainNumber: 0
+                stationUic: string
+                date: string
+                classification: Crowdforecast.Classification.UNKNOWN
+        '500':
+          description: Shows the crowd forecast of a certain train
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Crowdforecast'
+              example:
+                trainNumber: 0
+                stationUic: string
+                date: string
+                classification: Crowdforecast.Classification.UNKNOWN
+  '/api/v1/platform/{station}/{platform}':
+    get:
+      tags:
+        - Platform
+      summary: getPlatformInfo_1
+      description: 'Contains platform information for 5 stations: Ehv, Ht, Ut, Asa, Shl'
+      operationId: getPlatformInfo_1
+      parameters:
+        - name: station
+          in: path
+          description: The station code.
+          required: true
+          schema:
+            type: string
+        - name: platform
+          in: path
+          description: The platform number.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Information about platforms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformGroup'
+              example:
+                station: string
+                platform: string
+                directionFromLeftToRight: string
+                platformItems:
+                  - position: 0
+                    type: BAKBORD
+                    platformLetter: string
+                    bakBord: 0
+                    bakBordKrom: 0
+                    fase: string
+                    description: string
+                    bakBordKromOrElseBakBord: 0
+                platformDirections: { }
+                perronEinde:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+                perronBegin:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+        '400':
+          description: Information about platforms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformGroup'
+              example:
+                station: string
+                platform: string
+                directionFromLeftToRight: string
+                platformItems:
+                  - position: 0
+                    type: BAKBORD
+                    platformLetter: string
+                    bakBord: 0
+                    bakBordKrom: 0
+                    fase: string
+                    description: string
+                    bakBordKromOrElseBakBord: 0
+                platformDirections: { }
+                perronEinde:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+                perronBegin:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+        '500':
+          description: Information about platforms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformGroup'
+              example:
+                station: string
+                platform: string
+                directionFromLeftToRight: string
+                platformItems:
+                  - position: 0
+                    type: BAKBORD
+                    platformLetter: string
+                    bakBord: 0
+                    bakBordKrom: 0
+                    fase: string
+                    description: string
+                    bakBordKromOrElseBakBord: 0
+                platformDirections: { }
+                perronEinde:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+                perronBegin:
+                  position: 0
+                  type: BAKBORD
+                  platformLetter: string
+                  bakBord: 0
+                  bakBordKrom: 0
+                  fase: string
+                  description: string
+                  bakBordKromOrElseBakBord: 0
+  '/api/v1/images/{image}':
+    get:
+      tags:
+        - Image
+      summary: getImage_1
+      description: Train image
+      operationId: getImage_1
+      parameters:
+        - name: image
+          in: path
+          description: 'Name of the image including extension, usually .png.'
+          required: true
+          schema:
+            type: string
+          example: nsr_flirt_3.png
+      responses:
+        '200':
+          description: OK
+          content:
+            image/png:
+              schema:
+                type: string
+                format: byte
+              example: ''
+  /v2/ingekort:
+    get:
+      tags:
+        - Shorter trains V2
+      summary: getIngekort
+      description: List of trains which are shortened at some station with corresponding crowdedness indicator string
+      operationId: getIngekort
+      responses:
+        '200':
+          description: 'Information about a shorter train in the following format: trainNumber_stationCode. The station code indicates where the train will be shortened. The corresponding crowdedness indicator string can one one of the following: [BUSY, EXTRA BUSY]'
+          content:
+            application/json:
+              schema:
+                type: string
+              example: string
+        '400':
+          description: 'Information about a shorter train in the following format: trainNumber_stationCode. The station code indicates where the train will be shortened. The corresponding crowdedness indicator string can one one of the following: [BUSY, EXTRA BUSY]'
+          content:
+            application/json:
+              schema:
+                type: string
+              example: string
+        '500':
+          description: 'Information about a shorter train in the following format: trainNumber_stationCode. The station code indicates where the train will be shortened. The corresponding crowdedness indicator string can one one of the following: [BUSY, EXTRA BUSY]'
+          content:
+            application/json:
+              schema:
+                type: string
+              example: string
+  /api/v2/ingekort:
+    get:
+      tags:
+        - Shorter trains V2
+      summary: getIngekort_1
+      description: List of trains which are shortened at some station with corresponding crowdedness indicator string
+      operationId: getIngekort_1
+      responses:
+        '200':
+          description: 'Information about a shorter train in the following format: trainNumber_stationCode. The station code indicates where the train will be shortened. The corresponding crowdedness indicator string can one one of the following: [BUSY, EXTRA BUSY]'
+          content:
+            application/json:
+              schema:
+                type: string
+              example: string
+        '400':
+          description: 'Information about a shorter train in the following format: trainNumber_stationCode. The station code indicates where the train will be shortened. The corresponding crowdedness indicator string can one one of the following: [BUSY, EXTRA BUSY]'
+          content:
+            application/json:
+              schema:
+                type: string
+              example: string
+        '500':
+          description: 'Information about a shorter train in the following format: trainNumber_stationCode. The station code indicates where the train will be shortened. The corresponding crowdedness indicator string can one one of the following: [BUSY, EXTRA BUSY]'
+          content:
+            application/json:
+              schema:
+                type: string
+              example: string
+  '/api/v1/images/{materieel}/{image}':
+    get:
+      tags:
+        - Image
+      summary: getImageFromSubdirectory_1
+      description: RollingStock image
+      operationId: getImageFromSubdirectory_1
+      parameters:
+        - name: materieel
+          in: path
+          description: Name of the subdirectory
+          required: true
+          schema:
+            type: string
+          example: nsr_flirt_3
+        - name: image
+          in: path
+          description: 'Name of the image including extension, usually .png.'
+          required: true
+          schema:
+            type: string
+          example: nsr_flirt_3_1.png
+      responses:
+        '200':
+          description: OK
+          content:
+            image/png:
+              schema:
+                type: string
+                format: byte
+              example: ''
+  /api/v3/ingekort:
+    get:
+      tags:
+        - Shorter trains V3
+      summary: getIngekortV3
+      description: Map of trainrides containing a crowdedness indicator per station
+      operationId: getIngekortV3
+      responses:
+        '200':
+          description: 'Information about a shorter train in the following format: map(trainNumber -> map(stationCode, crowdedness)). The station code indicates where the train will be shortened. The corresponding crowdedness indicator string can one one of the following: [BUSY, EXTRA BUSY]'
+          content:
+            application/json:
+              schema:
+                type: string
+              example: string
+        '400':
+          description: 'Information about a shorter train in the following format: map(trainNumber -> map(stationCode, crowdedness)). The station code indicates where the train will be shortened. The corresponding crowdedness indicator string can one one of the following: [BUSY, EXTRA BUSY]'
+          content:
+            application/json:
+              schema:
+                type: string
+              example: string
+        '500':
+          description: 'Information about a shorter train in the following format: map(trainNumber -> map(stationCode, crowdedness)). The station code indicates where the train will be shortened. The corresponding crowdedness indicator string can one one of the following: [BUSY, EXTRA BUSY]'
+          content:
+            application/json:
+              schema:
+                type: string
+              example: string
+components:
+  schemas:
+    MaterieelDeel:
+      type: object
+      properties:
+        materieelDeel:
+          type: integer
+          format: int32
+        lat:
+          type: number
+          format: float
+        lng:
+          type: number
+          format: float
+        snelheid:
+          type: number
+          format: float
+        richting:
+          type: number
+          format: float
+    Trein:
+      type: object
+      properties:
+        ritId:
+          type: string
+        lat:
+          type: number
+          format: float
+        lng:
+          type: number
+          format: float
+        snelheid:
+          type: number
+          format: float
+        richting:
+          type: number
+          format: float
+        horizontaleNauwkeurigheid:
+          type: number
+          format: float
+        type:
+          type: string
+        materieelDeelList:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterieelDeel'
+        treinCloneWithMaterieel:
+          $ref: '#/components/schemas/Trein'
+    Treinen:
+      type: object
+      properties:
+        treinen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Trein'
+    Afbeelding:
+      type: object
+    Bak:
+      type: object
+      properties:
+        afbeelding:
+          $ref: '#/components/schemas/Afbeelding'
+        drukte:
+          enum:
+            - Crowdforecast.Classification.UNKNOWN
+            - Crowdforecast.Classification.HIGH
+            - Crowdforecast.Classification.MEDIUM
+            - Crowdforecast.Classification.LOW
+          type: string
+    ImageData:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+        width:
+          type: integer
+          format: int32
+        height:
+          type: integer
+          format: int32
+    PerronVoorziening:
+      type: object
+      properties:
+        paddingLeft:
+          type: integer
+          format: int32
+        width:
+          type: integer
+          format: int32
+        type:
+          type: string
+        description:
+          type: string
+    TreinDeel:
+      type: object
+      properties:
+        materieelType:
+          enum:
+            - DDZ_4
+            - DDZ_6
+            - DDZ_4SA
+            - SGMM_2
+            - SGMM_3
+            - SNG_3
+            - SNG_4
+            - SLT_4
+            - SLT_4E
+            - SLT_4ES
+            - SLT_6
+            - SLT_6E
+            - SLT_6ES
+            - SLT_6S
+            - FLIRT_2
+            - FLIRT_2_ARR
+            - FLIRT_3_ARR
+            - FLIRT_2_RNET
+            - FLIRT_3
+            - FLIRT_3_NS
+            - FLIRT_3_FFF
+            - FLIRT_3_BLAUWNET
+            - FLIRT_3_KEOLIS
+            - FLIRT_4
+            - FLIRT_4_NS
+            - FLIRT_4_FFF
+            - FLIRT_4_SY
+            - FLIRT_4_KEOLIS
+            - FLIRT_ABELLIO
+            - FLIRT_CONNEXXION
+            - FLIRT_4_VL
+            - FLIRT_5_VL
+            - FLIRT_5_HGL
+            - VIRM_4
+            - VIRMm1_4
+            - VIRMm2_4
+            - VIRM_6
+            - VIRMm1_6
+            - VIRMm2_6
+            - DB_REGIO_643
+            - DB_BPMZ
+            - DB_BER9_9
+            - DB_AVMZ
+            - DB_B15
+            - OEBB_BMZ
+            - MS80M3
+            - MS75_4
+            - DDM1_4DDM
+            - ICR_GV1_9_B10
+            - ICR_GV2_9_B10
+            - ICR_BNL_6_B10
+            - ICR_BNN_6_B10
+            - ICR_HSL_6_B10
+            - ICR_7
+            - SW6_25KV_2_6
+            - SW7_25KV_2_7
+            - SW9_25KV_2_9
+            - ELOC_1700
+            - ELOC_TR25
+            - ELOC_TRBE
+            - ELOC_TRAX
+            - CPROTOS_2
+            - DM90_2
+            - DDAR_3
+            - EUROSTAR
+            - THALYS
+            - TGV_PB
+            - ICE
+            - ICE_3
+            - ICE_3NEO
+            - MAT64
+            - GTW26
+            - GTWE26
+            - GTW28
+            - GTWE28
+            - GTWE26_VECHTDAL
+            - GTWE28_VETCHDAL
+            - GTW26_LIMBURG
+            - GTW28_LIMBURG
+            - GTWE26_LIMBURG
+            - GTWE28_LIMBURG
+            - GTW26_ARRIVA
+            - GTW28_ARRIVA
+            - GTW26_NOORD
+            - GTW28_NOORD
+            - GTWE26_ARRIVA
+            - GTWE28_ARRIVA
+            - GTW26_VEOLIA
+            - GTW28_VEOLIA
+            - GTWE26_VEOLIA
+            - GTWE28_VEOLIA
+            - GTW8_BRENG
+            - GTW26_QBUZZ
+            - GTWE28_QBUZZ
+            - LINT2
+            - LINT2_ARRIVA
+            - LINT2_VEOLIA
+            - LINT2_SYNTUS
+            - LINT2_KEOLIS
+            - ICM3
+            - ICM4
+            - ICNG5
+            - ICNG8
+            - WINK_ARRIVA
+            - UNKNOWN
+          type: string
+        drukteSVGPath:
+          type: string
+        materieelnummer:
+          type: integer
+          format: int32
+        type:
+          type: string
+        faciliteiten:
+          type: array
+          items:
+            enum:
+              - TOILET
+              - STILTE
+              - STROOM
+              - TOEGANKELIJK
+              - FIETS
+              - WIFI
+              - BISTRO
+            type: string
+          writeOnly: true
+        afbeelding:
+          type: string
+        eindbestemming:
+          type: string
+          writeOnly: true
+        bakken:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bak'
+        afbeeldingsSpecs:
+          $ref: '#/components/schemas/ImageData'
+        zitplaatsInfo:
+          $ref: '#/components/schemas/ZitplaatsInformatie'
+    TreinDrukte:
+      type: object
+    TreinInformatie:
+      type: object
+      properties:
+        crowdInfoResponse:
+          type: string
+        crowdInfoRequest:
+          type: string
+        bron:
+          enum:
+            - DVS
+            - KV6
+            - OBIS
+            - DAGPLAN
+            - NMBS
+          type: string
+          writeOnly: true
+        ritnummer:
+          type: integer
+          format: int32
+        station:
+          type: string
+        type:
+          type: string
+        vervoerder:
+          type: string
+        spoor:
+          type: string
+        materieeldelen:
+          type: array
+          items:
+            $ref: '#/components/schemas/TreinDeel'
+        geplandeMaterieeldelen:
+          type: array
+          items:
+            $ref: '#/components/schemas/TreinDeel'
+        lengte:
+          type: integer
+          format: int32
+        lengteInMeters:
+          type: integer
+          format: int32
+        lengteInPixels:
+          type: integer
+          format: int32
+          writeOnly: true
+        geplandeLengte:
+          type: integer
+          format: int32
+          writeOnly: true
+        perronVoorzieningen:
+          type: array
+          items:
+            $ref: '#/components/schemas/PerronVoorziening'
+        bakbord:
+          type: integer
+          format: int32
+          writeOnly: true
+        rijrichting:
+          enum:
+            - LINKS
+            - RECHTS
+          type: string
+        drukteVoorspelling:
+          $ref: '#/components/schemas/TreinDrukte'
+        treinDelen:
+          type: array
+          items:
+            $ref: '#/components/schemas/TreinDeel'
+          writeOnly: true
+    ZitplaatsInformatie:
+      type: object
+      properties:
+        staanplaatsEersteKlas:
+          type: integer
+          format: int32
+        staanplaatsTweedeKlas:
+          type: integer
+          format: int32
+        zitplaatsEersteKlas:
+          type: integer
+          format: int32
+        zitplaatsTweedeKlas:
+          type: integer
+          format: int32
+        klapstoelEersteKlas:
+          type: integer
+          format: int32
+        klapstoelTweedeKlas:
+          type: integer
+          format: int32
+    Crowdforecast:
+      type: object
+      properties:
+        trainNumber:
+          type: integer
+          format: int32
+        stationUic:
+          type: string
+        date:
+          type: string
+          format: date
+        classification:
+          enum:
+            - Crowdforecast.Classification.UNKNOWN
+            - Crowdforecast.Classification.HIGH
+            - Crowdforecast.Classification.MEDIUM
+            - Crowdforecast.Classification.LOW
+          type: string
+    PlatformDirection:
+      type: object
+      properties:
+        directionalPlatformItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlatformItem'
+        bakBordEinde:
+          $ref: '#/components/schemas/PlatformItem'
+        sein:
+          $ref: '#/components/schemas/PlatformItem'
+        juk:
+          $ref: '#/components/schemas/PlatformItem'
+    PlatformGroup:
+      type: object
+      properties:
+        station:
+          type: string
+        platform:
+          type: string
+        directionFromLeftToRight:
+          type: string
+        platformItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlatformItem'
+        platformDirections:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PlatformDirection'
+        perronEinde:
+          $ref: '#/components/schemas/PlatformItem'
+        perronBegin:
+          $ref: '#/components/schemas/PlatformItem'
+    PlatformItem:
+      type: object
+      properties:
+        position:
+          type: number
+          format: double
+        type:
+          enum:
+            - BAKBORD
+            - BAKBORDEINDE
+            - LETTERBORD
+            - LIFT
+            - TRAP
+            - BANK
+            - AFVAL
+            - KAP
+            - CTA
+            - ROLTRAP
+            - PERRONEINDE
+            - PERRONBEGIN
+            - JUK
+            - SEIN
+            - ANDERS
+          type: string
+        platformLetter:
+          type: string
+        bakBord:
+          type: integer
+          format: int32
+        bakBordKrom:
+          type: integer
+          format: int32
+        fase:
+          type: string
+        description:
+          type: string
+        bakBordKromOrElseBakBord:
+          type: integer
+          format: int32
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]

@@ -1,3 +1,6 @@
+# project
+.env
+
 # macOS
 .DS_Store
 .AppleDouble
@@ -9,3 +12,18 @@
 # Linux
 *~
 .nfs*
+
+# Gradle
+.gradle/
+**/build/
+
+# Kotlin
+.kotlin/
+
+# Android
+local.properties
+captures/
+*.iml
+
+# Temp
+tmp/
