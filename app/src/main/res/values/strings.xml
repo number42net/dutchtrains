@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DutchTrains</string>
+    <string name="label_from">From</string>
+    <string name="label_to">To</string>
+    <string name="label_direct_only">Direct</string>
+    <string name="label_ic_only">IC only</string>
+    <string name="label_settings">Settings</string>
+    <string name="label_api_key">NS API Key</string>
+    <string name="label_save">Save</string>
+    <string name="label_test_connection">Test connection</string>
+    <string name="label_stop_following">Stop</string>
+    <string name="msg_no_api_key">Enter your NS API key in Settings to get started.</string>
+    <string name="msg_no_results">No trains found for this route.</string>
+    <string name="msg_select_stations">Select departure and destination stations.</string>
+    <string name="notification_channel_following_name">Train Following</string>
+    <string name="notification_channel_following_desc">Shows while actively following a train</string>
+    <string name="notification_channel_updates_name">Train Updates</string>
+    <string name="notification_channel_updates_desc">Alerts when your followed train changes</string>
+    <string name="notification_following_title">Following %1$s</string>
+    <string name="notification_following_text">Monitoring for changes</string>
+</resources>
