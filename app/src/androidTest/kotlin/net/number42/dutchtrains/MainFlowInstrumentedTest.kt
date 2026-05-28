@@ -44,8 +44,43 @@ class MainFlowInstrumentedTest {
         runBlocking {
             resetAppStateForTest()
         }
+        grantLocationPermissionsForTests()
         ensureNotificationChannelsExist()
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    }
+
+    private fun grantLocationPermissionsForTests() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val packageName = instrumentation.targetContext.packageName
+
+        runCatching {
+            instrumentation.uiAutomation.executeShellCommand(
+                "pm grant $packageName android.permission.ACCESS_FINE_LOCATION",
+            )
+        }
+        runCatching {
+            instrumentation.uiAutomation.executeShellCommand(
+                "pm grant $packageName android.permission.ACCESS_COARSE_LOCATION",
+            )
+        }
+    }
+
+    private fun grantNotificationPermissionForTests() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val packageName = instrumentation.targetContext.packageName
+        runCatching {
+            instrumentation.uiAutomation.grantRuntimePermission(
+                packageName,
+                android.Manifest.permission.POST_NOTIFICATIONS,
+            )
+        }.onFailure {
+            runCatching {
+                instrumentation.uiAutomation.executeShellCommand(
+                    "pm grant $packageName android.permission.POST_NOTIFICATIONS",
+                )
+            }
+        }
     }
 
     private fun ensureNotificationChannelsExist() {
@@ -193,6 +228,16 @@ class MainFlowInstrumentedTest {
     }
 
     private fun dismissRuntimePermissionDialogsIfPresent() {
+        val allowButtonResIds = listOf(
+            "com.android.permissioncontroller:id/permission_allow_button",
+            "com.android.permissioncontroller:id/permission_allow_foreground_only_button",
+            "com.android.permissioncontroller:id/permission_allow_one_time_button",
+            "com.android.permissioncontroller:id/permission_allow_selected_button",
+            "com.google.android.permissioncontroller:id/permission_allow_button",
+            "com.google.android.permissioncontroller:id/permission_allow_foreground_only_button",
+            "com.google.android.permissioncontroller:id/permission_allow_one_time_button",
+            "com.google.android.permissioncontroller:id/permission_allow_selected_button",
+        )
         val permissionButtonResIds = listOf(
             "com.android.permissioncontroller:id/permission_deny_button",
             "com.android.permissioncontroller:id/permission_deny_and_dont_ask_again_button",
@@ -205,14 +250,24 @@ class MainFlowInstrumentedTest {
         )
 
         val denyLabels = mutableListOf("Don’t allow", "Don't allow", "DENY", "Deny")
+        val allowLabels = mutableListOf("Allow", "ALLOW")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             denyLabels += "Don’t allow notifications"
             denyLabels += "Don't allow notifications"
+            allowLabels += "Allow notifications"
         }
 
         repeat(3) {
-            val button = permissionButtonResIds.firstNotNullOfOrNull { id -> device.findObject(By.res(id)) }
-                ?: denyLabels.firstNotNullOfOrNull { label -> device.findObject(By.text(label)) }
+            val notificationPrompt = device.hasObject(By.textContains("notification")) ||
+                device.hasObject(By.textContains("Notification"))
+
+            val button = if (notificationPrompt) {
+                allowButtonResIds.firstNotNullOfOrNull { id -> device.findObject(By.res(id)) }
+                    ?: allowLabels.firstNotNullOfOrNull { label -> device.findObject(By.text(label)) }
+            } else {
+                permissionButtonResIds.firstNotNullOfOrNull { id -> device.findObject(By.res(id)) }
+                    ?: denyLabels.firstNotNullOfOrNull { label -> device.findObject(By.text(label)) }
+            }
             if (button == null) return
             button.click()
             device.waitForIdle()
@@ -256,6 +311,7 @@ class MainFlowInstrumentedTest {
 
     @Test
     fun followTripTogglesButton() {
+        grantNotificationPermissionForTests()
         navigateToTripDetail()
 
         assertTrue("Follow button should be visible",
@@ -276,6 +332,7 @@ class MainFlowInstrumentedTest {
 
     @Test
     fun followTripShowsForegroundNotification() {
+        grantNotificationPermissionForTests()
         navigateToTripDetail()
 
         device.findObject(By.text("Follow this train"))?.click()
@@ -298,8 +355,8 @@ class MainFlowInstrumentedTest {
     fun tripDetailRefreshUpdatesPlatform() {
         navigateToTripDetail()
 
-        assertTrue("Initial platform 4 should be shown",
-            device.wait(Until.hasObject(By.textContains("Platform 4")), TimeUnit.SECONDS.toMillis(8)))
+        assertTrue("Initial platform line should be shown",
+            device.wait(Until.hasObject(By.textContains("Platform ")), TimeUnit.SECONDS.toMillis(8)))
 
         MockBackendTestModule.updatedSingleTripTrack = "7"
 

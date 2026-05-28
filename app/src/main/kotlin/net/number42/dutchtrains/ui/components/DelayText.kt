@@ -14,7 +14,11 @@ import java.time.temporal.ChronoUnit
 private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm").withZone(ZoneId.of("Europe/Amsterdam"))
 
 @Composable
-fun DepartureTimeText(planned: Instant, actual: Instant, modifier: Modifier = Modifier) {
+fun DepartureTimeText(
+    planned: Instant,
+    actual: Instant,
+    modifier: Modifier = Modifier,
+) {
     val delayMinutes = java.time.temporal.ChronoUnit.MINUTES.between(planned, actual)
     val time = timeFormatter.format(actual)
 
@@ -22,12 +26,12 @@ fun DepartureTimeText(planned: Instant, actual: Instant, modifier: Modifier = Mo
         androidx.compose.foundation.layout.Row(modifier = modifier) {
             Text(
                 text = time,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
                 text = " +${delayMinutes}m",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Medium,
             )
@@ -35,7 +39,7 @@ fun DepartureTimeText(planned: Instant, actual: Instant, modifier: Modifier = Mo
     } else {
         Text(
             text = time,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = modifier,
         )
@@ -43,7 +47,11 @@ fun DepartureTimeText(planned: Instant, actual: Instant, modifier: Modifier = Mo
 }
 
 @Composable
-fun ArrivalTimeText(planned: Instant, actual: Instant, modifier: Modifier = Modifier) {
+fun ArrivalTimeText(
+    planned: Instant,
+    actual: Instant,
+    modifier: Modifier = Modifier,
+) {
     val delayMinutes = ChronoUnit.MINUTES.between(planned, actual)
     val time = timeFormatter.format(actual)
 
@@ -51,13 +59,13 @@ fun ArrivalTimeText(planned: Instant, actual: Instant, modifier: Modifier = Modi
         Row(modifier = modifier) {
             Text(
                 text = time,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
                 text = " +${delayMinutes}m",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Medium,
             )
@@ -65,7 +73,7 @@ fun ArrivalTimeText(planned: Instant, actual: Instant, modifier: Modifier = Modi
     } else {
         Text(
             text = time,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = modifier,
         )

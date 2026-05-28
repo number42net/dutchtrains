@@ -15,8 +15,15 @@ plugins {
 
 // Android stubs give us android.util.Log etc at compile time; the real implementation
 // is never called in unit tests (Log methods return 0/null by default on JVM).
+val androidSdkPath = sequenceOf(
+    System.getenv("ANDROID_HOME"),
+    System.getenv("ANDROID_SDK_ROOT"),
+    "${System.getProperty("user.home")}/Library/Android/sdk",
+    "/opt/android-sdk",
+).firstOrNull { !it.isNullOrBlank() }
+
 val androidJar: FileCollection = files(
-    System.getenv("ANDROID_HOME")?.let { "$it/platforms/android-35/android.jar" }
+    androidSdkPath?.let { "$it/platforms/android-35/android.jar" }
         ?: "/opt/android-sdk/platforms/android-35/android.jar"
 )
 
