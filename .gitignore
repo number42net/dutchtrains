@@ -25,6 +25,7 @@ AGENTS.md
 local.properties
 captures/
 *.iml
+release.jks
 
 # Temp
 tmp/

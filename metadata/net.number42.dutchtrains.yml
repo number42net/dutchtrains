@@ -1,0 +1,32 @@
+Categories:
+  - Navigation
+License: Apache-2.0
+AuthorName: Number42
+SourceCode: https://github.com/number42net/dutchtrains
+IssueTracker: https://github.com/number42net/dutchtrains/issues
+Changelog: https://github.com/number42net/dutchtrains/releases
+
+AutoName: DutchTrains
+Summary: Check NS train departures and follow live train journeys.
+Description: |
+  DutchTrains is a commuter-focused app for Dutch rail travel.
+
+  Features include:
+  . Trip planning between Dutch stations
+  . Platform and delay monitoring
+  . Train composition and length details
+  . Live trip following with notifications
+  . Nearest station detection via GPS
+
+  For live NS data, users provide their own NS API key in-app.
+
+Binaries: https://github.com/number42net/dutchtrains/releases/download/%c/dutchtrains-%c.apk
+AllowedAPKSigningKeys:
+  - 307da27564323ca9774789641820d7de16f0eb6a649953d3e1b0b509dff4c9e0
+
+Builds:
+  - versionName: 1.0
+    versionCode: 1
+    commit: v1.0
+    gradle:
+      - yes

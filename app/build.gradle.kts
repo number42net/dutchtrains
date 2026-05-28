@@ -11,6 +11,15 @@ android {
     namespace = "net.number42.dutchtrains"
     compileSdk = 35
 
+    signingConfigs {
+        register("release") {
+            storeFile = rootProject.file("release.jks")
+            storePassword = project.findProperty("KEYSTORE_PASSWORD") as String? ?: ""
+            keyAlias = project.findProperty("KEY_ALIAS") as String? ?: ""
+            keyPassword = project.findProperty("KEY_PASSWORD") as String? ?: ""
+        }
+    }
+
     defaultConfig {
         applicationId = "net.number42.dutchtrains"
         minSdk = 26
@@ -25,6 +34,9 @@ android {
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            if (rootProject.file("release.jks").exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
