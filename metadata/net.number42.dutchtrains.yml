@@ -20,8 +20,8 @@ Description: |
 
   For live NS data, users provide their own NS API key in-app.
 
-Binaries: 
-  https://github.com/number42net/dutchtrains/releases/download/%c/dutchtrains-%c.apk
+Binaries:
+  https://github.com/number42net/dutchtrains/releases/download/%c/dutchtrains-v%c.apk
 
 Builds:
   - versionName: '1.0'

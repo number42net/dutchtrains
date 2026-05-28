@@ -7,13 +7,11 @@ decision making while traveling.
 
 ## Features
 
-- Search trips between any two Dutch stations
-- View trip details: departure/arrival times, platform, duration, and rolling stock
+- Notifies of platform changes, delays, and arrival times
 - See departure-track arrival timing (when the train is expected to arrive at your platform)
 - See train length and composition to help pick better boarding positions
-- Follow a trip — a background service tracks it and notifies you of platform changes, delays, and arrival times
-- Receive push notifications for any tracked-trip change while commuting
-- Nearest station detection via GPS
+- Auto switch departure and destination stations based on location
+- View trip details: departure/arrival times, platform, duration, and rolling stock
 
 ## Screenshots
 
