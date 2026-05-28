@@ -73,6 +73,7 @@ class ScreenshotCaptureInstrumentedTest {
             device.wait(Until.hasObject(By.text("Stop following")), TimeUnit.SECONDS.toMillis(8))
             notificationHelper.postChangeNotification(
                 trainName = "IC 1234",
+                tripTitle = "Amsterdam Centraal → Almere Centrum",
                 ctxRecon = "mock-ctx-ic",
                 changes = listOf(TrainChange(TrainEventType.PLATFORM_CHANGES, "Platform", "4", "6")),
             )

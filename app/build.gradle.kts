@@ -79,8 +79,6 @@ dependencies {
     // Coroutines
     implementation(libs.coroutines.android)
 
-    // Location
-    implementation(libs.play.services.location)
 
     // Debug
     debugImplementation(libs.compose.ui.tooling)

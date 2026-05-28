@@ -121,7 +121,7 @@ class TrainFollowService : Service() {
                             val changes = detectChanges(prev, newSnap, events)
                             Log.d(TAG, "detected ${changes.size} change(s): ${changes.map { it.field }}")
                             if (changes.isNotEmpty()) {
-                                notificationHelper.postChangeNotification(trainName, ctxRecon, changes)
+                                notificationHelper.postChangeNotification(trainName, tripTitle, ctxRecon, changes)
                                 notificationHelper.updateFollowingNotification(
                                     tripTitle = tripTitle ?: trainName,
                                     detail = tripTimes ?: changes.joinToString(" · ") { "${it.field}: ${it.to}" },
