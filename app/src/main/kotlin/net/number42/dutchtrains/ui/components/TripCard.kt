@@ -34,6 +34,8 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -84,9 +86,15 @@ fun TripCard(
     val crowd = trip.publicLegs
         .firstNotNullOfOrNull { it.crowdForecast?.takeIf { forecast -> forecast != "UNKNOWN" } }
 
+    val cardDescription = when {
+        hasCancelledLeg -> "Cancelled trip"
+        trip.transfers == 0 -> "Direct trip"
+        else -> "${trip.transfers}× change trip"
+    }
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .semantics { contentDescription = cardDescription }
             .drawWithContent {
                 drawContent()
                 if (hasCancelledLeg) {

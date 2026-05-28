@@ -1,5 +1,6 @@
 # project
 .env
+AGENTS.md
 
 # macOS
 .DS_Store
@@ -27,3 +28,6 @@ captures/
 
 # Temp
 tmp/
+
+# Python venv for screenshot tooling
+.venv/

@@ -2,12 +2,31 @@
 
 Android app for checking NS train departures and following live train journeys.
 
+Dutch Trains is intentionally a power-user commuter app: it focuses on high-signal operational details and fast
+decision making while traveling.
+
 ## Features
 
 - Search trips between any two Dutch stations
 - View trip details: departure/arrival times, platform, duration, and rolling stock
-- Follow a trip — a foreground service tracks it and notifies you of platform changes, delays, and arrival times
+- See departure-track arrival timing (when the train is expected to arrive at your platform)
+- See train length and composition to help pick better boarding positions
+- Follow a trip — a background service tracks it and notifies you of platform changes, delays, and arrival times
+- Receive push notifications for any tracked-trip change while commuting
 - Nearest station detection via GPS
+
+## Screenshots
+
+<table>
+  <tr>
+    <td><img src="assets/screenshots/commute-overview.png"></td>
+    <td><img src="assets/screenshots/trip-detail-ic.png"></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/trip-detail-sprinter.png"></td>
+    <td><img src="assets/screenshots/follow-notification.png"></td>
+  </tr>
+</table>
 
 ## Requirements
 
@@ -43,6 +62,17 @@ The app also reads it from a `.env` file in the repo root, which is used by the 
 
 The output APK is at `app/build/outputs/apk/debug/app-debug.apk`.
 
+### Release build (F-Droid compatible)
+
+```sh
+./gradlew clean :app:assembleRelease
+```
+
+Notes:
+- The app does not require secrets at build time.
+- NS API key is user-provided in-app at runtime.
+- The release artifact is generated at `app/build/outputs/apk/release/`.
+
 ## Testing
 
 ```sh
@@ -54,6 +84,30 @@ The output APK is at `app/build/outputs/apk/debug/app-debug.apk`.
 ```
 
 The instrumented test suite uses a `MockWebServer` in place of the real NS API, so no API key is needed.
+
+To run the full local test process (JVM + ordered instrumented suites):
+
+```sh
+bash ./scripts/run-tests.sh
+```
+
+The script runs:
+1. `./gradlew test`
+2. permission-flow instrumented tests
+3. main-flow instrumented tests
+
+## F-Droid publishing notes
+
+- Ensure release tags and version codes are incremented for each release.
+- Build using `:app:assembleRelease` from a clean checkout.
+- Use this repo's source tarball/tag as the build source.
+- Keep dependencies and Gradle plugin versions pinned in source control.
+
+To capture/update these screenshots:
+
+```sh
+bash ./scripts/generate-readme-screenshots.sh
+```
 
 ## Tech stack
 
