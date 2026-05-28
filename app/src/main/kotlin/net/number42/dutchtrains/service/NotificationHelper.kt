@@ -65,7 +65,7 @@ class NotificationHelper @Inject constructor(
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
     }
 
-    fun postChangeNotification(trainName: String, ctxRecon: String, changes: List<TrainChange>) {
+    fun postChangeNotification(trainName: String, tripTitle: String?, ctxRecon: String, changes: List<TrainChange>) {
         val text = changes.joinToString(" · ") { "${it.field}: ${it.from} → ${it.to}" }
         val openIntent = PendingIntent.getActivity(
             context,
@@ -78,7 +78,7 @@ class NotificationHelper @Inject constructor(
         )
         val notification = NotificationCompat.Builder(context, DutchTrainsApp.CHANNEL_UPDATES)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Update: $trainName")
+            .setContentTitle("Update: ${tripTitle ?: trainName}")
             .setContentText(text)
             .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setAutoCancel(true)

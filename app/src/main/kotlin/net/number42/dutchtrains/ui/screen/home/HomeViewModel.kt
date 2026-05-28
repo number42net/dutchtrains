@@ -90,12 +90,14 @@ class HomeViewModel @Inject constructor(
     private var startupAutoSwitchAttempted: Boolean = false
     private var latestTrips: List<Trip> = emptyList()
     private var homeInitializedFromPrefs: Boolean = false
+    private val _prefsLoaded = MutableStateFlow(false)
 
     init {
         viewModelScope.launch {
             appPreferences.apiKeyFlow.collectLatest { apiKey ->
                 if (apiKey.isBlank()) {
                     homeInitializedFromPrefs = false
+                    _prefsLoaded.value = false
                     _uiState.update { it.copy(tripsState = TripsState.NoApiKey) }
                     return@collectLatest
                 }
@@ -121,6 +123,7 @@ class HomeViewModel @Inject constructor(
 
                     if (from != null && to != null) startAutoRefresh()
                     homeInitializedFromPrefs = true
+                    _prefsLoaded.value = true
                 }
             }
         }
@@ -384,6 +387,7 @@ class HomeViewModel @Inject constructor(
         if (startupAutoSwitchAttempted) return
         startupAutoSwitchAttempted = true
         viewModelScope.launch {
+            _prefsLoaded.first { it }
             locationHelper.getCurrentLocation()
                 .onSuccess { location ->
                     val nearest = stationRepository.getNearestStation(location.latitude, location.longitude) ?: return@onSuccess

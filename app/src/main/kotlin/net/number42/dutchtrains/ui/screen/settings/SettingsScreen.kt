@@ -43,11 +43,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.foundation.text.ClickableText
 import net.number42.dutchtrains.ui.theme.AppCardBackground
 import net.number42.dutchtrains.ui.theme.AppScreenBackground
 
@@ -58,6 +64,7 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val uriHandler = LocalUriHandler.current
     var keyVisible by remember { mutableStateOf(false) }
     var displayWindowExpanded by remember { mutableStateOf(false) }
 
@@ -93,10 +100,29 @@ fun SettingsScreen(
 
                 Text("NS API Key", style = MaterialTheme.typography.titleMedium, color = Color(0xFF1F2638))
                 Spacer(Modifier.height(4.dp))
-                Text(
-                    text = "Obtain a key at apiportal.ns.nl. Subscribe to the NS App API.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF67718B),
+                val apiPortalText = buildAnnotatedString {
+                    append("Obtain a key at ")
+                    pushStringAnnotation(tag = "URL", annotation = "https://apiportal.ns.nl")
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color(0xFF4C5FD7),
+                            textDecoration = TextDecoration.Underline,
+                        ),
+                    ) {
+                        append("apiportal.ns.nl")
+                    }
+                    pop()
+                    append(". Subscribe to the NS App API.")
+                }
+                ClickableText(
+                    text = apiPortalText,
+                    style = MaterialTheme.typography.bodySmall.copy(color = Color(0xFF67718B)),
+                    onClick = { offset ->
+                        apiPortalText
+                            .getStringAnnotations(tag = "URL", start = offset, end = offset)
+                            .firstOrNull()
+                            ?.let { uriHandler.openUri(it.item) }
+                    },
                 )
                 Spacer(Modifier.height(12.dp))
 

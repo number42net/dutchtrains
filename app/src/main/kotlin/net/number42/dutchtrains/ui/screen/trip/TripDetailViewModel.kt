@@ -18,6 +18,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.number42.dutchtrains.data.datastore.AppPreferences
+import net.number42.dutchtrains.data.repository.StationRepository
 import net.number42.dutchtrains.data.repository.TripRepository
 import net.number42.dutchtrains.domain.model.TrainMaterial
 import net.number42.dutchtrains.domain.model.Trip
@@ -40,6 +41,7 @@ class TripDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     @ApplicationContext private val context: Context,
     private val tripRepository: TripRepository,
+    private val stationRepository: StationRepository,
     private val appPreferences: AppPreferences,
 ) : ViewModel() {
     private companion object {
@@ -96,7 +98,7 @@ class TripDetailViewModel @Inject constructor(
             )
         }
 
-        val fromCode = appPreferences.fromStationFlow.first()?.code
+        val fromCode = resolveFromStationCode(_uiState.value.trip)
         tripRepository.getUpdatedTrip(ctxRecon, fromCode)
             .onSuccess { trip ->
                 val materials = _uiState.value.materials.toMutableMap().apply { putAll(initialMaterials) }
@@ -143,7 +145,7 @@ class TripDetailViewModel @Inject constructor(
         val leg = trip.firstPublicLeg ?: return
         val lastLeg = trip.publicLegs.lastOrNull() ?: leg
         viewModelScope.launch {
-            val fromCode = appPreferences.fromStationFlow.first()?.code
+            val fromCode = resolveFromStationCode(trip)
             val tripTitle = "${leg.originName} -> ${lastLeg.destinationName}"
             val tripTimes = "${FOLLOW_TIME_FORMATTER.format(leg.actualDeparture)} -> ${FOLLOW_TIME_FORMATTER.format(lastLeg.actualArrival)}"
             val intent = Intent(context, TrainFollowService::class.java).apply {
@@ -159,6 +161,17 @@ class TripDetailViewModel @Inject constructor(
             context.startForegroundService(intent)
             appPreferences.saveFollowedCtxRecon(trip.ctxRecon)
         }
+    }
+
+    private suspend fun resolveFromStationCode(currentTrip: Trip?): String? {
+        val preferredCode = appPreferences.fromStationFlow.first()?.code
+        if (!preferredCode.isNullOrBlank()) return preferredCode
+
+        val originName = currentTrip?.firstPublicLeg?.originName?.takeIf { it.isNotBlank() } ?: return null
+        val candidates = stationRepository.searchStations(originName)
+
+        return candidates.firstOrNull { it.name.equals(originName, ignoreCase = true) }?.code
+            ?: candidates.firstOrNull()?.code
     }
 
     fun onStopFollowing() {

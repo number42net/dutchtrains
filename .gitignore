@@ -1,5 +1,6 @@
 # project
 .env
+AGENTS.md
 
 # macOS
 .DS_Store
@@ -24,6 +25,10 @@
 local.properties
 captures/
 *.iml
+release.jks
 
 # Temp
 tmp/
+
+# Python venv for screenshot tooling
+.venv/

@@ -22,8 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
@@ -57,7 +60,7 @@ fun TripDetailCard(
         ) {
             Text(
                 text = firstLeg.originName,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
             )
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
@@ -69,7 +72,7 @@ fun TripDetailCard(
             )
             Text(
                 text = lastLeg.destinationName,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
             )
         }
 
@@ -92,7 +95,7 @@ fun TripDetailCard(
                 Spacer(Modifier.weight(1f))
                 Text(
                     text = "${trip.transfers}× change",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
@@ -118,7 +121,7 @@ fun TripDetailCard(
                 }
                 Text(
                     text = materialNumbers ?: publicLeg.name.removePrefix(publicLeg.category).trim().ifBlank { publicLeg.name },
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     textDecoration = if (publicLeg.cancelled) TextDecoration.LineThrough else TextDecoration.None,
                     modifier = Modifier.weight(1f),
@@ -126,7 +129,7 @@ fun TripDetailCard(
                 if (publicLeg.cancelled) {
                     Text(
                         text = "CANCELLED",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.error,
                     )
                 } else if (isFollowed && index == 0) {
@@ -153,8 +156,29 @@ fun TripDetailCard(
                     else -> "??:??"
                 }
                 Text(
-                    text = "Platform $depPlatform (train arrives here: $depPlatformArrivalTime)",
-                    style = MaterialTheme.typography.bodySmall,
+                    text = buildAnnotatedString {
+                        append("Platform ")
+                        withStyle(
+                            style = SpanStyle(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                        ) {
+                            append(depPlatform)
+                        }
+                        append(" (train arrives here: ")
+                        withStyle(
+                            style = SpanStyle(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                        ) {
+                            append(depPlatformArrivalTime)
+                        }
+                        append(")")
+                    },
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Normal,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
             }
@@ -168,7 +192,8 @@ fun TripDetailCard(
                 val arrPlatformTime = detailPlatformFormatter.format(publicLeg.actualArrival)
                 Text(
                     text = "Arrival platform $arrPlatform at $arrPlatformTime",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Normal,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
             }
@@ -180,8 +205,19 @@ fun TripDetailCard(
             ) {
                 legMaterial?.length?.let { length ->
                     Text(
-                        text = "Length: $length",
-                        style = MaterialTheme.typography.bodySmall,
+                        text = buildAnnotatedString {
+                            append("Length: ")
+                            withStyle(
+                                style = SpanStyle(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold,
+                                ),
+                            ) {
+                                append(length.toString())
+                            }
+                        },
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Normal,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -197,7 +233,8 @@ fun TripDetailCard(
                                 "HIGH" -> "Busy"
                                 else -> crowd
                             },
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Normal,
                             color = when (crowd) {
                                 "LOW" -> MaterialTheme.colorScheme.tertiary
                                 "MEDIUM" -> MaterialTheme.colorScheme.secondary
@@ -228,7 +265,7 @@ fun TripDetailCard(
                             .build(),
                         contentDescription = "Train image",
                         modifier = Modifier
-                            .height(27.dp)
+                            .height(34.dp)
                             .clip(RoundedCornerShape(10.dp)),
                         contentScale = ContentScale.FillHeight,
                     )
