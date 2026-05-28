@@ -161,6 +161,8 @@ object MockBackendTestModule {
         return """{"trips":[
             {"ctxRecon":"mock-ctx-ic","transfers":0,"status":"NORMAL","plannedDurationInMinutes":20,"actualDurationInMinutes":20,
              "legs":[{"travelType":"PUBLIC_TRANSIT","name":"IC 1234","journeyDetailRef":"1234","cancelled":false,"product":{"categoryCode":"IC","shortCategoryName":"IC"},"origin":{"name":"Amsterdam Centraal","plannedDateTime":"$depStr","actualDateTime":"$depStr","plannedTrack":"4","actualTrack":"4"},"destination":{"name":"Almere Centrum","plannedDateTime":"$arrStr","actualDateTime":"$arrStr","plannedTrack":"2","actualTrack":"2"}}]},
+            {"ctxRecon":"mock-ctx-cancelled","transfers":0,"status":"CANCELLED","plannedDurationInMinutes":15,"actualDurationInMinutes":15,
+             "legs":[{"travelType":"PUBLIC_TRANSIT","name":"IC 5678","journeyDetailRef":"5678","cancelled":true,"product":{"categoryCode":"IC","shortCategoryName":"IC"},"origin":{"name":"Amsterdam Centraal","plannedDateTime":"$cancelledDepStr","actualDateTime":"$cancelledDepStr","plannedTrack":"7","actualTrack":"7"},"destination":{"name":"Almere Centrum","plannedDateTime":"$cancelledArrStr","actualDateTime":"$cancelledArrStr","plannedTrack":"3","actualTrack":"3"}}]},
             {"ctxRecon":"mock-ctx-spr","transfers":1,"status":"NORMAL","plannedDurationInMinutes":29,"actualDurationInMinutes":29,
              "legs":[
                {"travelType":"PUBLIC_TRANSIT","name":"SPR 4321","journeyDetailRef":"4321","cancelled":false,"product":{"categoryCode":"SPR","shortCategoryName":"SPR"},"origin":{"name":"Amsterdam Centraal","plannedDateTime":"$depStr","actualDateTime":"$depStr","plannedTrack":"5","actualTrack":"5"},"destination":{"name":"Amsterdam Amstel","plannedDateTime":"$sprMidStr","actualDateTime":"$sprMidStr","plannedTrack":"1","actualTrack":"1"}},
@@ -205,6 +207,10 @@ object MockBackendTestModule {
     private val sprSecondDepStr: String = sprSecondDepTime.format(TIMESTAMP_FMT)
     private val sprArrStr: String = sprArrTime.format(TIMESTAMP_FMT)
     private val originArrivalStr: String = mockDepartureTime.minusMinutes(10).format(TIMESTAMP_FMT)
+    private val cancelledDepTime: ZonedDateTime = mockDepartureTime.plusMinutes(5)
+    private val cancelledArrTime: ZonedDateTime = cancelledDepTime.plusMinutes(15)
+    private val cancelledDepStr: String = cancelledDepTime.format(TIMESTAMP_FMT)
+    private val cancelledArrStr: String = cancelledArrTime.format(TIMESTAMP_FMT)
 
     private fun loadAssetBytes(path: String): ByteArray {
         val assets = InstrumentationRegistry.getInstrumentation().context.assets

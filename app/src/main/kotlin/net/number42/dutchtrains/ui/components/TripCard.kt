@@ -28,10 +28,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
@@ -46,6 +47,7 @@ import net.number42.dutchtrains.domain.model.Trip
 
 private val FollowedCardColor = Color(0xFFDCE4FF)
 private val DefaultCardColor = Color.White
+private val CancelledCardColor = Color(0xFFEEEEEE)
 private val DangerColor = Color(0xFFB3261E)
 private val MutedTextColor = Color(0xFF596273)
 private val FollowDotColor = Color(0xFF4F5FCF)
@@ -65,10 +67,13 @@ fun TripCard(
     val hasCancelledLeg = trip.publicLegs.any { it.cancelled }
 
     val cardColor by animateColorAsState(
-        targetValue = if (isFollowed) FollowedCardColor else DefaultCardColor,
+        targetValue = when {
+            hasCancelledLeg -> CancelledCardColor
+            isFollowed -> FollowedCardColor
+            else -> DefaultCardColor
+        },
         label = "cardColor",
     )
-    val strikeColor = DangerColor.copy(alpha = 0.55f)
 
     val legImageUrls = trip.publicLegs
         .mapNotNull { publicLeg ->
@@ -95,23 +100,12 @@ fun TripCard(
         modifier = modifier
             .fillMaxWidth()
             .semantics { contentDescription = cardDescription }
-            .drawWithContent {
-                drawContent()
-                if (hasCancelledLeg) {
-                    drawLine(
-                        color = strikeColor,
-                        start = Offset(0f, size.height / 2f),
-                        end = Offset(size.width, size.height / 2f),
-                        strokeWidth = 4.dp.toPx(),
-                    )
-                }
-            }
             .clickable(enabled = !hasCancelledLeg, onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = cardColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         shape = RoundedCornerShape(12.dp),
     ) {
-        Column {
+        Column(modifier = if (hasCancelledLeg) Modifier.alpha(0.45f) else Modifier) {
             // ── Times row ─────────────────────────────────────────────────────
             Row(
                 modifier = Modifier
@@ -249,6 +243,7 @@ fun TripCard(
                                     .crossfade(false)
                                     .build(),
                                 contentDescription = "Train image",
+                                colorFilter = if (hasCancelledLeg) ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }) else null,
                                 modifier = Modifier
                                     .height(27.dp)
                                     .clip(RoundedCornerShape(10.dp)),
